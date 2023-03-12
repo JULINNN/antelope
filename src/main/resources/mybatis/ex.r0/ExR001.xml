@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ju.antelope.ex.a0.dao.ExR001Dao">
+
+    <select id="insertUnique" resultType="Integer">
+        MERGE antelpoe.ex_r001 exr001
+            USING (VALUES (#{currency}, #{exrate}
+            , #{dataTime})) AS foo (currency, exrate, dataTime)
+            ON exr001.currency = foo.currency
+            AND exr001.exrate = foo.exrate
+            AND exr001.data_time = foo.dataTime
+            WHEN NOT MATCHED THEN
+            INSERT (create_at,currency, exrate, data_time)
+            VALUES (getdate(),#{currency}, #{exrate}, #{dataTime});
+    </select>
+
+    <sql id="standard_table">
+        with standard_currency as (select top 1 *
+                                   from antelpoe.ex_r001
+                                   where currency = ISNULL(convert(varchar, #{currency}), 'TWD')
+                                   order by data_time desc),
+             standard_table as (select currency,
+                                       ROUND(1 / (exrate / (select standard_currency.exrate from standard_currency)),
+                                             8)                                                     exrate,
+                                       DATEADD(hh, ISNULL(convert(int, #{offSet}), +08), data_time) data_time
+                                from antelpoe.ex_r001)
+    </sql>
+
+    <sql id="baseWhereSql">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="dataStart != null and dataStart != ''">and data_time %gt;= #{dataStart}</if>
+            <if test="dataEnd != null and dataEnd != ''">and data_time %lt;= #{dataEnd}</if>
+            <if test="currencies != null and currencies.size() != 0">
+                and currency in
+                <foreach collection="currencies" close=")" item="item" open="(" separator=",">#{item}</foreach>
+            </if>
+        </trim>
+    </sql>
+
+    <select id="queryAggregate" resultType="com.ju.antelope.ex.a0.vo.ExR001Vo$CommonResult">
+        <include refid="standard_table"></include>
+        select currency,avg(exrate) exrate,max(data_time) data_time,DATEDIFF(SECOND, min(data_time), max(data_time))
+        interval,count(1) data_count
+        from standard_table
+        <include refid="baseWhereSql"></include>
+        group by currency;
+    </select>
+
+    <select id="queryTimely" resultType="com.ju.antelope.ex.a0.vo.ExR001Vo$CommonResult">
+        <include refid="standard_table"></include>
+        select *,DATEDIFF(SECOND, min(data_time), max(data_time)) interval,count(1) data_count
+        from (select *,
+        row_number() over (partition by currency order by data_time desc) row_num from standard_table) foo
+        where foo.row_num = 1
+        <if test="currency != null and currencies.size() != 0">
+            and foo.currency in
+            <foreach collection="list" close=")" item="item" open="(" separator=",">#{item}</foreach>
+        </if>
+    </select>
+</mapper>

@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.2'
     id 'io.spring.dependency-management' version '1.1.0'
+    id 'application'
+    id 'war'
 }
 
 group = 'com.ju'
@@ -13,9 +15,9 @@ repositories {
 }
 
 dependencies {
-    implementation ('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-web')
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
-    developmentOnly ('org.springframework.boot:spring-boot-devtools')
+    developmentOnly('org.springframework.boot:spring-boot-devtools')
 // https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc
     implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '7.4.0.jre12'
 
@@ -33,6 +35,22 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat
+    providedCompile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '3.0.3'
+
+// https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2
+    implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.9.0'
+
+    // https://mvnrepository.com/artifact/com.linecorp.bot/line-bot-api-client
+    implementation group: 'com.linecorp.bot', name: 'line-bot-api-client', version: '6.0.0'
+// https://mvnrepository.com/artifact/com.linecorp.bot/line-bot-model
+    implementation group: 'com.linecorp.bot', name: 'line-bot-model', version: '6.0.0'
+// https://mvnrepository.com/artifact/com.linecorp.bot/line-bot-spring-boot
+    implementation group: 'com.linecorp.bot', name: 'line-bot-spring-boot', version: '6.0.0'
+// https://mvnrepository.com/artifact/com.linecorp.bot/line-bot-servlet
+    implementation group: 'com.linecorp.bot', name: 'line-bot-servlet', version: '6.0.0'
+
 }
 
 
@@ -44,4 +62,11 @@ configurations {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+
+bootJar {
+    manifest {
+        attributes('Start-Class': 'com.ju.antelope.AntelopeApplication')
+    }
 }
