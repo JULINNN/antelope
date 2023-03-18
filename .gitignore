@@ -34,8 +34,9 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
-
 ### VS Code ###
 .vscode/
 
 src/main/resources/default.properties
+/src/main/java/generate/
+/src/main/resources/generator/

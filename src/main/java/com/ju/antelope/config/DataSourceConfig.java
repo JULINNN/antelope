@@ -48,7 +48,7 @@ public class DataSourceConfig {
 
   @Bean
   @Primary
-  public DataSource jndiDataSource(@Value("jdbc.jndi") String jndi)
+  public DataSource jndiDataSource(@Value("${jdbc.jndi}") String jndi)
       throws IllegalArgumentException, NamingException {
     JndiObjectFactoryBean bean = new JndiObjectFactoryBean();
     bean.setJndiName(JNDI_PREFIX + jndi);
