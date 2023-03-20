@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ju.antelope.ds.b0.dao.base.DsB002BaseDao">
+
+    <resultMap id="vo" type="com.ju.antelope.ds.b0.vo.base.DsB002BaseVo">
+        <id property="infoNum" column="info_num"/>
+        <result property="createAt" column="create_at"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateAt" column="update_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="typeNum" column="type_num"/>
+        <result property="info" column="info"/>
+        <result property="col1" column="col1"/>
+        <result property="col2" column="col2"/>
+        <result property="col3" column="col3"/>
+        <result property="col4" column="col4"/>
+        <result property="dataTime" column="data_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        info_num
+        ,create_at,create_by,
+        update_at,update_by,type_num,
+        info,col1,col2,
+        col3,col4,data_time
+    </sql>
+
+    <sql id="whereCondition">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="infoNum != null">and info_num = #{infoNum}</if>
+            <if test="createAt != null">and create_at = #{createAt}</if>
+            <if test="createBy != null">and create_by = #{createBy}</if>
+            <if test="updateAt != null">and update_at = #{updateAt}</if>
+            <if test="updateBy != null">and update_by = #{updateBy}</if>
+            <if test="typeNum != null">and type_num = #{typeNum}</if>
+            <if test="info != null">and info = #{info}</if>
+            <if test="col1 != null">and col1 = #{col1}</if>
+            <if test="col2 != null">and col2 = #{col2}</if>
+            <if test="col3 != null">and col3 = #{col3}</if>
+            <if test="col4 != null">and col4 = #{col4}</if>
+            <if test="dataTime != null">and data_time = #{dataTime}</if>
+        </trim>
+    </sql>
+
+    <sql id="insertSql">
+        insert into antelope.ds_b002
+        (
+        <trim prefixOverrides=",">
+            <if test="infoNum != null">, #{infoNum}</if>
+            <if test="createAt != null">, #{createAt}</if>
+            <if test="createBy != null">, #{createBy}</if>
+            <if test="updateAt != null">, #{updateAt}</if>
+            <if test="updateBy != null">, #{updateBy}</if>
+            <if test="typeNum != null">, #{typeNum}</if>
+            <if test="info != null">, #{info}</if>
+            <if test="col1 != null">, #{col1}</if>
+            <if test="col2 != null">, #{col2}</if>
+            <if test="col3 != null">, #{col3}</if>
+            <if test="col4 != null">, #{col4}</if>
+            <if test="dataTime != null">, #{dataTime}</if>
+            )
+        </trim>
+    </sql>
+
+    <sql id="insertValue">
+        <trim prefixOverrides=",">
+            <if test="infoNum != null">, #{infoNum}</if>
+            <if test="createAt != null">, #{createAt}</if>
+            <if test="createBy != null">, #{createBy}</if>
+            <if test="updateAt != null">, #{updateAt}</if>
+            <if test="updateBy != null">, #{updateBy}</if>
+            <if test="typeNum != null">, #{typeNum}</if>
+            <if test="info != null">, #{info}</if>
+            <if test="col1 != null">, #{col1}</if>
+            <if test="col2 != null">, #{col2}</if>
+            <if test="col3 != null">, #{col3}</if>
+            <if test="col4 != null">, #{col4}</if>
+            <if test="dataTime != null">, #{dataTime}</if>
+        </trim>
+    </sql>
+
+    <select id="query" resultMap="vo">
+        select
+        <include refid="Base_Column_List"></include>
+        from antelope.ds_b002
+        <include refid="whereCondition"></include>
+    </select>
+
+    <select id="count" resultMap="vo">
+        select count(*)
+        from antelope.ds_b002
+        <include refid="whereCondition"></include>
+    </select>
+
+    <insert id="insert" keyColumn="info_num" keyProperty="infoNum" useGeneratedKeys="true">
+        <include refid="insertSql"/>
+        values(
+        <include refid="insertValue"/>
+        )
+    </insert>
+
+    <select id="getByPk" parameterType="java.lang.Long" resultMap="vo">
+        select
+        <include refid="Base_Column_List"/>
+        from antelope.ds_b002
+        where info_num = #{infoNum}
+    </select>
+
+    <delete id="deleteByPk" parameterType="java.lang.Long">
+        delete
+        from antelope.ds_b002
+        where info_num = #{infoNum}
+    </delete>
+
+
+    <sql id="updateSql">
+        update antelope.ds_b002
+        <trim prefix="set" prefixOverrides=",">
+            <if test="infoNum != null">, info_num = #{infoNum}</if>
+            <if test="createAt != null">, create_at = #{createAt}</if>
+            <if test="createBy != null">, create_by = #{createBy}</if>
+            <if test="updateAt != null">, update_at = #{updateAt}</if>
+            <if test="updateBy != null">, update_by = #{updateBy}</if>
+            <if test="typeNum != null">, type_num = #{typeNum}</if>
+            <if test="info != null">, info = #{info}</if>
+            <if test="col1 != null">, col1 = #{col1}</if>
+            <if test="col2 != null">, col2 = #{col2}</if>
+            <if test="col3 != null">, col3 = #{col3}</if>
+            <if test="col4 != null">, col4 = #{col4}</if>
+            <if test="dataTime != null">, data_time = #{dataTime}</if>
+        </trim>
+    </sql>
+
+    <update id="update">
+        <include refid="updateSql"></include>
+        where info_num = #{infoNum}
+    </update>
+
+</mapper>

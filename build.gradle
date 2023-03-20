@@ -17,12 +17,17 @@ repositories {
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
+    implementation 'org.projectlombok:lombok:1.18.22'
     developmentOnly('org.springframework.boot:spring-boot-devtools')
 // https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc
     implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '7.4.0.jre12'
 
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '3.0.3'
+//Thanks for using https://jar-download.com
+
+
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
 // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
@@ -50,6 +55,10 @@ dependencies {
     implementation group: 'com.linecorp.bot', name: 'line-bot-spring-boot', version: '6.0.0'
 // https://mvnrepository.com/artifact/com.linecorp.bot/line-bot-servlet
     implementation group: 'com.linecorp.bot', name: 'line-bot-servlet', version: '6.0.0'
+// https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2
+    implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.9.0'
+// https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
 
 }
 
