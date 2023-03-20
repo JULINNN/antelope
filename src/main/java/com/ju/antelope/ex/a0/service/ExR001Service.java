@@ -52,11 +52,6 @@ public class ExR001Service {
                   ? StringUtils.substringAfter(currency, USD)
                   : currency);
           exR001Vo.setDataTime(dataTime);
-
-          String a = exR001Vo.getDataTime();
-          String b = exR001Vo.getDataTime();
-
-          log.info("{},{}", a, b);
           exR001Vo.setExrate(
               BigDecimal.valueOf(exrate).setScale(8, RoundingMode.CEILING).doubleValue());
           sqlSession.getMapper(ExR001Dao.class).insertUnique(exR001Vo);

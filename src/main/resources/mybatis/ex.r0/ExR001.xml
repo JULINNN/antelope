@@ -4,7 +4,7 @@
 <mapper namespace="com.ju.antelope.ex.a0.dao.ExR001Dao">
 
     <select id="insertUnique" resultType="Integer">
-        MERGE antelpoe.ex_r001 exr001
+        MERGE antelope.ex_r001 exr001
             USING (VALUES (#{currency}, #{exrate}
             , #{dataTime})) AS foo (currency, exrate, dataTime)
             ON exr001.currency = foo.currency
@@ -17,14 +17,14 @@
 
     <sql id="standard_table">
         with standard_currency as (select top 1 *
-                                   from antelpoe.ex_r001
+                                   from antelope.ex_r001
                                    where currency = ISNULL(convert(varchar, #{currency}), 'TWD')
                                    order by data_time desc),
              standard_table as (select currency,
                                        ROUND(1 / (exrate / (select standard_currency.exrate from standard_currency)),
                                              8)                                                     exrate,
                                        DATEADD(hh, ISNULL(convert(int, #{offSet}), +08), data_time) data_time
-                                from antelpoe.ex_r001)
+                                from antelope.ex_r001)
     </sql>
 
     <sql id="baseWhereSql">
@@ -57,5 +57,27 @@
             and foo.currency in
             <foreach collection="list" close=")" item="item" open="(" separator=",">#{item}</foreach>
         </if>
+    </select>
+
+
+    <resultMap id="dsbBoardVo" type="com.ju.antelope.ds.b0.vo.DsB002Vo">
+        <result column="exrate" property="info"/>
+        <result column="data_date" property="dataTime"/>
+        <result column="currency" property="col1"/>
+        <result column="count" property="col2"/>
+        <result column="type_num" property="typeNum"/>
+    </resultMap>
+
+    <select id="queryDateAvg" resultMap="dsbBoardVo">
+        select convert(dateTime, foo.data_date) data_date,
+               foo.currency,
+               avg(foo.exrate)                  exrate,
+               count(1) count,
+               1 type_num
+        from (select convert (date, dateadd(hh, 8, data_time)) data_date, *
+            from antelope.ex_r001) foo
+        group by foo.data_date, currency
+        having data_date between #{dateFrom}
+           and #{dateTo}
     </select>
 </mapper>

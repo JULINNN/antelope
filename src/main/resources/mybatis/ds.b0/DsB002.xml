@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ju.antelope.ds.b0.dao.DsB002Dao">
+
+    <insert id="insertOrUpdate">
+        MERGE antelope.ds_b002 dsb002
+            USING (VALUES (#{dataTime}, #{col1},#{typeNum})) AS foo (dataTime, col1,typeNum)
+            ON dsb002.data_time = foo.dataTime
+            AND dsb002.col1 = foo.col1
+            AND dsb002.type_num = foo.typeNum
+            WHEN NOT MATCHED THEN
+            INSERT (data_time,type_num,info,col1,col2)
+            VALUES (#{dataTime},#{typeNum},#{info}, #{col1}, #{col2})
+            WHEN MATCHED THEN
+        UPDATE
+            set info = #{info},
+            col2 = #{col2},
+            update_at = getdate();
+    </insert>
+</mapper>
